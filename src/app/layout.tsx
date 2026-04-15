@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from './_compoents/Navbar/Navbar';
+import Navbar from "./_compoents/Navbar/Navbar";
 import Footer from "./_compoents/Footer/Footer";
+import FirstNav from "./_compoents/FirstNav/FirstNav";
+import { Toaster } from "@/components/ui/sonner";
+import { SessionProvider } from "next-auth/react";
+import MyProvider from "./_compoents/MyProvider/MyProvider";
+import CartContextProvider from "../Context/CartContext"
+import CardsFooter from "./_compoents/CardsFooter/CardsFooter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,13 +31,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <Navbar  />
-      <body className="min-h-full flex flex-col">{children}</body>
-      <Footer />
+    <html lang="en">
+      <body
+        suppressHydrationWarning
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <CartContextProvider>
+
+        <MyProvider>
+          <FirstNav />
+          <Navbar />
+          {children}
+          <Toaster />
+                <CardsFooter />
+
+          <Footer />
+        </MyProvider>
+        </CartContextProvider>
+
+      </body>
     </html>
   );
 }
